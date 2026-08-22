@@ -82,9 +82,16 @@ export default function Layout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const handleLogout = async () => {
-    await logout()
-    // Setelah logout langsung kembali ke landing page.
+    // Navigasi DULU keluar dari area admin supaya guard RequireAuth tidak
+    // sempat mengarahkan ke /admin/login saat state user dinolkan, lalu
+    // bersihkan sesi di background.
     navigate('/', { replace: true })
+    try {
+      await logout()
+    } catch {
+      // Kegagalan API logout diabaikan — sesi lokal tetap dibersihkan
+      // oleh logout() lewat blok finally-nya.
+    }
   }
 
   return (
