@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, ApiError } from '../../lib/api.js'
+import { toMapsEmbedUrl } from '../../lib/maps.js'
 import { useToast } from '../components/Toast.jsx'
 
 export default function KontakPage() {
@@ -51,7 +52,8 @@ export default function KontakPage() {
     setFieldErrors({})
     setSaving(true)
     try {
-      const data = await api.post('/admin/content/kontak', form)
+      const maps = toMapsEmbedUrl(form.maps_embed)
+      const data = await api.post('/admin/content/kontak', { ...form, maps_embed: maps.url })
       const d = data || {}
       setForm({
         whatsapp: d.whatsapp ?? form.whatsapp,
@@ -62,6 +64,7 @@ export default function KontakPage() {
         maps_embed: d.maps_embed ?? form.maps_embed,
       })
       showToast('Kontak berhasil disimpan', 'success')
+      if (form.maps_embed.trim() && !maps.ok) showToast('URL Maps tidak dikenali, disimpan apa adanya. Gunakan link google.com/maps yang lengkap.', 'info')
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)
@@ -116,7 +119,7 @@ export default function KontakPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-ink-700 mb-1">Maps Embed</label>
-            <textarea value={form.maps_embed} onChange={(e) => update('maps_embed', e.target.value)} rows={3} className="w-full rounded-lg border border-neutral-300 px-3 py-2.5 text-sm focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" placeholder='<iframe src="..."></iframe> atau URL embed Google Maps' />
+            <textarea value={form.maps_embed} onChange={(e) => update('maps_embed', e.target.value)} rows={3} className="w-full rounded-lg border border-neutral-300 px-3 py-2.5 text-sm focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" placeholder="Tempel URL Google Maps apa pun: link biasa, link share, atau URL embed" />
             {fieldErrors.maps_embed && <p className="mt-1 text-xs text-danger-600">{fieldErrors.maps_embed}</p>}
           </div>
         </div>

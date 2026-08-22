@@ -1,5 +1,6 @@
 import Reveal from './Reveal'
 import { waLink } from '../data'
+import { toMapsEmbedUrl } from '../../lib/maps.js'
 
 function InfoItem({ icon, label, children, href }) {
   const inner = (
@@ -24,7 +25,7 @@ function InfoItem({ icon, label, children, href }) {
 
 export default function Kontak({ data }) {
   const k = data || {}
-  const mapSrc = k.maps_embed
+  const mapSrc = k.maps_embed ? toMapsEmbedUrl(k.maps_embed).url : ''
   const ig = k.instagram ? `https://instagram.com/${k.instagram.replace(/^@/, '')}` : '#'
 
   return (
