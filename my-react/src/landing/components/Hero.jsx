@@ -1,6 +1,6 @@
 import { waLink } from '../data'
 
-export default function Hero({ data }) {
+export default function Hero({ data, introActive = false }) {
   const bg = data?.foto_background
   const ctaHref = data?.link_tombol || waLink(data?.whatsapp)
 
@@ -8,6 +8,9 @@ export default function Hero({ data }) {
     <section
       id="beranda"
       className="relative flex min-h-[78vh] items-center justify-center overflow-hidden sm:min-h-[85vh] lg:min-h-[92vh]"
+      // Saat splash intro aktif, geser hero-rise agar mulai berbarengan
+      // dengan splash mulai keluar (transisi kontinu, tanpa jeda kosong).
+      style={{ '--hero-rise-offset': introActive ? '1.5s' : '0s' }}
     >
       {/* Latar foto + gradien cadangan */}
       <div className="absolute inset-0 bg-gradient-to-br from-ink-900 via-ink-950 to-ink-950" />

@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logopsht.png" />
+    <!-- Preload logo agar tidak pop-in saat animasi intro mulai (t=0.1s) -->
+    <link rel="preload" as="image" href="/logopsht.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>UKM PSHT UPN "Veteran" Jawa Timur — Persaudaraan Setia Hati Terate</title>
     <meta
@@ -24,6 +26,14 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+    />
+    <!-- Preload Cinzel (latin) agar teks splash tidak FOUT di kunjungan pertama -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="https://fonts.gstatic.com/s/cinzel/v26/8vIJ7ww63mVu7gt79mT7.woff2"
+      crossorigin
     />
   </head>
   <body>

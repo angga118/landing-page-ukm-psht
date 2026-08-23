@@ -135,17 +135,20 @@ textarea::placeholder {
   opacity: 0;
   animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+/* Offset opsional: saat splash intro aktif, naikkan delay agar hero-rise
+   mulai berbarengan dengan splash mulai keluar (transisi kontinu).
+   Default 0s → perilaku normal untuk pengunjung tanpa splash. */
 .hero-rise.d1 {
-  animation-delay: 0.15s;
+  animation-delay: calc(0.15s + var(--hero-rise-offset, 0s));
 }
 .hero-rise.d2 {
-  animation-delay: 0.35s;
+  animation-delay: calc(0.35s + var(--hero-rise-offset, 0s));
 }
 .hero-rise.d3 {
-  animation-delay: 0.55s;
+  animation-delay: calc(0.55s + var(--hero-rise-offset, 0s));
 }
 .hero-rise.d4 {
-  animation-delay: 0.75s;
+  animation-delay: calc(0.75s + var(--hero-rise-offset, 0s));
 }
 
 /* Scroll reveal helper */
@@ -184,6 +187,151 @@ textarea::placeholder {
 .rule-gold {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--color-gold-500), transparent);
+}
+
+/* ===== Intro splash (preloader) =====
+   Timeline (total ~2.2s):
+   0.10s  logo muncul (scale + glow emas)
+   0.55s  garis emas melebar
+   0.90s  teks nama situs fade-in
+   1.50s  splash keluar (fade + sedikit zoom) → selesai 2.20s
+   Hero di belakang mulai hero-rise bersamaan (lihat --hero-rise-offset). */
+@keyframes introLogoIn {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+    filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.55));
+  }
+}
+
+@keyframes introRuleIn {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes introTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    letter-spacing: 0.18em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.32em;
+  }
+}
+
+@keyframes introExit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+}
+
+.intro-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  /* Padding horizontal aman agar teks tidak menempel tepi di layar sempit */
+  padding-inline: 1.5rem;
+  background-color: var(--color-ink-950);
+  overflow: hidden;
+}
+
+/* Lapisan grain tipis agar tidak terasa datar */
+.intro-splash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.intro-logo {
+  position: relative;
+  width: clamp(96px, 22vw, 150px);
+  height: auto;
+  opacity: 0;
+  animation: introLogoIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+.intro-rule {
+  position: relative;
+  width: min(260px, 62vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold-500), transparent);
+  transform: scaleX(0);
+  opacity: 0;
+  transform-origin: center;
+  animation: introRuleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.55s;
+}
+
+.intro-name {
+  position: relative;
+  margin: 0;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-gold-200);
+  font-size: clamp(0.78rem, 2.6vw, 1.05rem);
+  line-height: 1.5;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: introTextIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.9s;
+}
+
+/* Fase keluar: splash memudar + sedikit zoom, memperlihatkan halaman. */
+.intro-splash.is-exiting {
+  pointer-events: none;
+  animation: introExit 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 1.5s;
+}
+
+/* Landscape / viewport pendek: kecilkan logo & jarak agar muat (~360px tinggi) */
+@media (max-height: 430px) {
+  .intro-splash {
+    gap: 1rem;
+  }
+  .intro-logo {
+    width: clamp(72px, 16vw, 104px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-logo,
+  .intro-rule,
+  .intro-name,
+  .intro-splash.is-exiting {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
