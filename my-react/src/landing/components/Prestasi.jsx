@@ -25,34 +25,41 @@ export default function Prestasi({ data = [] }) {
           <div className="mx-auto mt-5 h-px w-24 bg-gold-500/60" />
         </Reveal>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {list.map((p, i) => {
-            const style = TINGKAT_STYLE[p.tingkat] || TINGKAT_STYLE['Provinsi']
-            return (
-              <Reveal key={p.id} delay={(i % 4) * 70}>
-                <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink-900/70 transition-all duration-300 hover:-translate-y-1 hover:border-gold-500/40">
-                  <div className="relative">
-                    <SmartImage
-                      src={p.foto}
-                      alt={`Trofi dan dokumentasi ${p.nama_lomba}, ${p.tingkat} ${p.tahun}`}
-                      seed={i + 3}
-                      className="aspect-[16/10] w-full object-cover"
-                    />
-                    <span className="absolute right-3 top-3 rounded-full border bg-ink-950/70 px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur">
-                      <span className={style}>{p.tahun}</span>
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-4">
-                    <span className={`mb-2 inline-block w-fit rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style}`}>
-                      {p.tingkat}
-                    </span>
-                    <h3 className="text-sm font-semibold leading-snug text-white">{p.nama_lomba}</h3>
-                  </div>
-                </article>
-              </Reveal>
-            )
-          })}
-        </div>
+        {list.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-ink-900/50 py-12 text-center">
+            <div className="h-px w-16 bg-gold-500/50" />
+            <p className="text-sm text-neutral-400">Daftar prestasi akan segera diperbarui</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {list.map((p, i) => {
+              const style = TINGKAT_STYLE[p.tingkat] || TINGKAT_STYLE['Provinsi']
+              return (
+                <Reveal key={p.id} delay={(i % 4) * 70}>
+                  <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink-900/70 transition-all duration-300 hover:-translate-y-1 hover:border-gold-500/40">
+                    <div className="relative">
+                      <SmartImage
+                        src={p.foto}
+                        alt={`Trofi dan dokumentasi ${p.nama_lomba}, ${p.tingkat} ${p.tahun}`}
+                        seed={i + 3}
+                        className="aspect-[16/10] w-full object-cover"
+                      />
+                      <span className="absolute right-3 top-3 rounded-full border bg-ink-950/70 px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur">
+                        <span className={style}>{p.tahun}</span>
+                      </span>
+                    </div>
+                    <div className="flex flex-1 flex-col p-4">
+                      <span className={`mb-2 inline-block w-fit rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style}`}>
+                        {p.tingkat}
+                      </span>
+                      <h3 className="text-sm font-semibold leading-snug text-white">{p.nama_lomba}</h3>
+                    </div>
+                  </article>
+                </Reveal>
+              )
+            })}
+          </div>
+        )}
       </div>
     </section>
   )

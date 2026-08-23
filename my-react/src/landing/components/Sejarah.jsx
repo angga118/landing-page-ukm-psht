@@ -1,9 +1,8 @@
 import Reveal from './Reveal'
 import SmartImage from './SmartImage'
+import { RichTextRenderer } from '../../lib/richText.js'
 
 export default function Sejarah({ data }) {
-  const paragraphs = (data?.konten || '').split(/\n\n+/).filter(Boolean)
-
   return (
     <section id="sejarah" className="relative scroll-mt-24 bg-ink-950 py-20 sm:py-28">
       <div className="absolute inset-0 grain opacity-40" />
@@ -18,9 +17,9 @@ export default function Sejarah({ data }) {
               Sejarah
             </h2>
             <div className="mt-5 h-px w-20 bg-gold-500/60" />
-            <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-neutral-300 sm:text-base">
-              {paragraphs.length ? (
-                paragraphs.map((p, i) => <p key={i}>{p}</p>)
+            <div className="mt-6 text-[15px] leading-relaxed text-neutral-300 sm:text-base">
+              {data?.konten?.trim() ? (
+                <RichTextRenderer text={data.konten} />
               ) : (
                 <p>Konten sejarah sedang disiapkan.</p>
               )}

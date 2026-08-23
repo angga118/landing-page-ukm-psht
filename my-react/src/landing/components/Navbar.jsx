@@ -87,8 +87,9 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile full-screen overlay */}
+      {/* Mobile full-screen overlay — inert saat tertutup agar link tak menerima fokus keyboard */}
       <div
+        inert={!open}
         className={`fixed inset-0 z-40 flex flex-col bg-ink-950/98 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}

@@ -1,8 +1,8 @@
 import { waLink } from '../data'
 
-export default function Hero({ data, introActive = false }) {
+export default function Hero({ data, wa, introActive = false }) {
   const bg = data?.foto_background
-  const ctaHref = data?.link_tombol || waLink(data?.whatsapp)
+  const ctaHref = waLink(wa)
 
   return (
     <section
@@ -40,29 +40,27 @@ export default function Hero({ data, introActive = false }) {
           Tangguh Dalam Aksi, Unggul Dalam Prestasi
         </p>
 
-        {/* Tombol CTA hanya tampil jika "Teks Tombol" diisi lewat admin */}
-        {data?.teks_tombol && (
-          <div className="hero-rise d4 mt-9 flex justify-center">
-            <a
-              href={ctaHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex min-h-[48px] items-center gap-2 rounded-full bg-gold-500 px-7 py-3 text-sm font-semibold tracking-wide text-ink-950 shadow-[0_8px_30px_rgba(212,175,55,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold-400 hover:shadow-[0_12px_40px_rgba(212,175,55,0.5)] sm:text-base focus-ring"
+        {/* CTA primer statis: selalu tampil, mengarah ke WhatsApp kontak */}
+        <div className="hero-rise d4 mt-9 flex justify-center">
+          <a
+            href={ctaHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex min-h-[48px] items-center gap-2 rounded-full bg-gold-500 px-7 py-3 text-sm font-semibold tracking-wide text-ink-950 shadow-[0_8px_30px_rgba(212,175,55,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold-400 hover:shadow-[0_12px_40px_rgba(212,175,55,0.5)] sm:text-base focus-ring"
+          >
+            {'Gabung Sekarang'}
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="transition-transform duration-300 group-hover:translate-x-1"
+              aria-hidden="true"
             >
-              {data.teks_tombol}
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="transition-transform duration-300 group-hover:translate-x-1"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </a>
-          </div>
-        )}
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       {/* Indikator scroll */}

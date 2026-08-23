@@ -26,8 +26,28 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    checkMe()
-  }, [checkMe])
+    let cancelled = false
+    ;(async () => {
+      try {
+        const data = await api.get('/admin/me')
+        if (cancelled) return
+        setUser(data?.user || data || null)
+        setError(null)
+      } catch (e) {
+        if (cancelled) return
+        if (e instanceof ApiError && e.status === 401) {
+          setUser(null)
+        } else {
+          setError(e.message)
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const login = async (username, password) => {
     const data = await api.post('/admin/login', { username, password })
@@ -51,6 +71,7 @@ export function AuthProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- ko-lokasi hook+provider disengaja, pola standar React context
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth harus di dalam AuthProvider')

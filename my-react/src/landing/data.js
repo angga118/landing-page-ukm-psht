@@ -11,8 +11,6 @@ export const FALLBACK_CONTENT = {
     judul: "UKM PSHT UPN 'Veteran' Jawa Timur",
     tagline: 'Tangguh Dalam Aksi, Unggul Dalam Prestasi',
     foto_background: heroBg,
-    teks_tombol: '',
-    link_tombol: 'https://wa.me/6281234567890',
   },
 
   sejarah: {

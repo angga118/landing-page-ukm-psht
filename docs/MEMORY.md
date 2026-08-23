@@ -73,10 +73,10 @@
 10. **Link "Lihat Website" di admin** (`Layout.jsx`) — Globe icon di bawah sidebar +
     drawer mobile, buka landing page di tab baru (`target="_blank"`).
 
-11. **Tombol "Bergabung Sekarang" dihapus** — CTA hero jadi kondisional
-    (`{data?.teks_tombol && ...}` di `Hero.jsx`); nilai dikosongkan di DB (`hero`),
-    fallback `data.js`, dan seed `schema.sql`. Untuk mengaktifkan lagi: isi kolom
-    "Teks Tombol" di menu Beranda admin panel.
+11. **Tombol "Bergabung Sekarang" dihapus** — CTA hero kini statis ("Gabung Sekarang"
+    → WhatsApp kontak). Kolom `teks_tombol` & `link_tombol` sudah di-DROP dari DB
+    (`hero`), dibersihkan dari `schema.sql`, API (`admin.php`, `content.php`),
+    form admin (`HeroPage.jsx`), dan `data.js`.
 
 12. **Tes E2E menyeluruh — SEMUA LOLOS**: DB & seed utuh; 6 endpoint publik 200;
     auth lengkap (401 password salah, logout mematikan sesi); CRUD round-trip

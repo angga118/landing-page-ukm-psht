@@ -24,7 +24,6 @@ export default function Lightbox({ items, index, onClose, onNavigate }) {
         prevFocusRef.current.focus()
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Penanganan keyboard: Escape, panah, dan focus trap.
@@ -118,7 +117,7 @@ export default function Lightbox({ items, index, onClose, onNavigate }) {
         </div>
         <figcaption className="mt-3 flex items-center justify-between text-sm text-neutral-300">
           <span className="uppercase tracking-wider text-gold-400">{current?.kategori || 'Galeri'}</span>
-          <span className="text-neutral-500">
+           <span className="text-neutral-400">
             {index + 1} / {items.length}
           </span>
         </figcaption>

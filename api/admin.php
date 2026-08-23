@@ -32,8 +32,6 @@ function handleAdmin(string $path, string $method): void {
         $data = getRequestData();
         $judul = trim($data['judul'] ?? '');
         $tagline = trim($data['tagline'] ?? '');
-        $teks_tombol = trim($data['teks_tombol'] ?? '');
-        $link_tombol = trim($data['link_tombol'] ?? '');
 
         // foto_background upload
         $foto = handleUpload('foto_background', 'hero');
@@ -55,25 +53,23 @@ function handleAdmin(string $path, string $method): void {
                 }
                 // Use values if provided, otherwise keep old
                 // Fetch full row for fallback
-                $stmt2 = $pdo->prepare("SELECT judul, tagline, teks_tombol, link_tombol FROM hero WHERE id = ?");
+                $stmt2 = $pdo->prepare("SELECT judul, tagline FROM hero WHERE id = ?");
                 $stmt2->execute([$existing['id']]);
                 $old = $stmt2->fetch();
                 $finalJudul = $judul !== '' ? $judul : $old['judul'];
                 $finalTagline = $tagline !== '' ? $tagline : $old['tagline'];
-                $finalTeks = $teks_tombol !== '' ? $teks_tombol : $old['teks_tombol'];
-                $finalLink = $link_tombol !== '' ? $link_tombol : $old['link_tombol'];
 
-                $upd = $pdo->prepare("UPDATE hero SET judul=?, tagline=?, foto_background=?, teks_tombol=?, link_tombol=? WHERE id=?");
-                $upd->execute([$finalJudul, $finalTagline, $newFoto, $finalTeks, $finalLink, $existing['id']]);
-                $stmt = $pdo->prepare("SELECT id, judul, tagline, foto_background, teks_tombol, link_tombol FROM hero WHERE id=?");
+                $upd = $pdo->prepare("UPDATE hero SET judul=?, tagline=?, foto_background=? WHERE id=?");
+                $upd->execute([$finalJudul, $finalTagline, $newFoto, $existing['id']]);
+                $stmt = $pdo->prepare("SELECT id, judul, tagline, foto_background FROM hero WHERE id=?");
                 $stmt->execute([$existing['id']]);
                 jsonSuccess($stmt->fetch());
             } else {
                 // Insert - require judul? allow empty but provide default
-                $ins = $pdo->prepare("INSERT INTO hero (judul, tagline, foto_background, teks_tombol, link_tombol) VALUES (?,?,?,?,?)");
-                $ins->execute([$judul, $tagline, $foto ?? '', $teks_tombol, $link_tombol]);
+                $ins = $pdo->prepare("INSERT INTO hero (judul, tagline, foto_background) VALUES (?,?,?)");
+                $ins->execute([$judul, $tagline, $foto ?? '']);
                 $id = $pdo->lastInsertId();
-                $stmt = $pdo->prepare("SELECT id, judul, tagline, foto_background, teks_tombol, link_tombol FROM hero WHERE id=?");
+                $stmt = $pdo->prepare("SELECT id, judul, tagline, foto_background FROM hero WHERE id=?");
                 $stmt->execute([$id]);
                 jsonSuccess($stmt->fetch());
             }

@@ -20,7 +20,6 @@ export default function KontakPage() {
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
     api
       .get('/content/kontak')
       .then((data) => {

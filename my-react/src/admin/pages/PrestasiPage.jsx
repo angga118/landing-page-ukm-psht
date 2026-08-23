@@ -40,7 +40,24 @@ export default function PrestasiPage() {
   }
 
   useEffect(() => {
-    fetchList()
+    let cancelled = false
+    ;(async () => {
+      try {
+        const data = await api.get(`/admin/${RESOURCE}`)
+        if (cancelled) return
+        const arr = Array.isArray(data) ? data : data?.data || data || []
+        setItems(Array.isArray(arr) ? arr : [])
+        setError('')
+      } catch (e) {
+        if (cancelled) return
+        setError(e instanceof ApiError ? e.message : e.message)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const handleReorder = async (newItems) => {

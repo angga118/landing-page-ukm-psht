@@ -24,29 +24,36 @@ export default function Galeri({ data = [] }) {
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {list.map((g, i) => (
-            <Reveal key={g.id} delay={(i % 4) * 60}>
-              <button
-                type="button"
-                onClick={() => setActive(i)}
-                aria-label={`Buka galeri: ${g.kategori || 'foto'}`}
-                className="group relative block aspect-square w-full overflow-hidden rounded-xl ring-1 ring-white/10 transition-all duration-300 hover:ring-gold-500/50"
-              >
-                <SmartImage
-                  src={g.foto}
-                  alt={`Galeri UKM PSHT — ${g.kategori || 'dokumentasi'}`}
-                  seed={i + 1}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <span className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <span className="absolute bottom-2 left-2 translate-y-1 text-[11px] font-medium uppercase tracking-wider text-gold-300 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  {g.kategori || 'Galeri'}
-                </span>
-              </button>
-            </Reveal>
-          ))}
-        </div>
+        {list.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-ink-900/50 py-12 text-center">
+            <div className="h-px w-16 bg-gold-500/50" />
+            <p className="text-sm text-neutral-400">Galeri akan segera diperbarui</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {list.map((g, i) => (
+              <Reveal key={g.id} delay={(i % 4) * 60}>
+                <button
+                  type="button"
+                  onClick={() => setActive(i)}
+                  aria-label={`Buka galeri: ${g.kategori || 'foto'}`}
+                  className="group relative block aspect-square w-full overflow-hidden rounded-xl ring-1 ring-white/10 transition-all duration-300 hover:ring-gold-500/50"
+                >
+                  <SmartImage
+                    src={g.foto}
+                    alt={`Galeri UKM PSHT — ${g.kategori || 'dokumentasi'}`}
+                    seed={i + 1}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <span className="absolute bottom-2 left-2 translate-y-1 text-[11px] font-medium uppercase tracking-wider text-gold-300 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    {g.kategori || 'Galeri'}
+                  </span>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+        )}
       </div>
 
       {active !== null && (

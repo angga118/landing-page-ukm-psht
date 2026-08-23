@@ -20,9 +20,7 @@ CREATE TABLE `hero` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `judul` VARCHAR(255) NOT NULL DEFAULT '',
   `tagline` VARCHAR(500) NOT NULL DEFAULT '',
-  `foto_background` VARCHAR(512) NOT NULL DEFAULT '',
-  `teks_tombol` VARCHAR(255) NOT NULL DEFAULT '',
-  `link_tombol` VARCHAR(512) NOT NULL DEFAULT ''
+  `foto_background` VARCHAR(512) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- sejarah
@@ -81,8 +79,8 @@ CREATE TABLE `admin_user` (
 
 -- Seed data
 
-INSERT INTO `hero` (`judul`, `tagline`, `foto_background`, `teks_tombol`, `link_tombol`) VALUES
-("UKM PSHT UPN \"Veteran\" Jawa Timur", "Tangguh Dalam Aksi, Unggul Dalam Prestasi", "", "", "#kontak");
+INSERT INTO `hero` (`judul`, `tagline`, `foto_background`) VALUES
+("UKM PSHT UPN \"Veteran\" Jawa Timur", "Tangguh Dalam Aksi, Unggul Dalam Prestasi", "");
 
 INSERT INTO `sejarah` (`konten`, `foto`) VALUES
 ("Persaudaraan Setia Hati Terate (PSHT) didirikan pada tahun 1922 di Desa Pilangbango, Madiun oleh Ki Hadjar Hardjo Oetomo, dan kemudian dikembangkan secara luas mulai tahun 1925 di Surabaya oleh R. Hadisoebroto bersama para pendahulu lainnya. PSHT tumbuh sebagai organisasi pencak silat yang mengajarkan tidak hanya teknik bela diri, tetapi juga budi pekerti luhur, persaudaraan, dan kepedulian sosial. Dengan falsafah \"Manusia dapat dihancurkan, manusia dapat dimatikan, tetapi manusia tidak dapat dikalahkan selama manusia itu setia pada hatinya sendiri\", PSHT berkembang menjadi salah satu perguruan pencak silat terbesar di Indonesia.\n\nUKM PSHT di UPN \"Veteran\" Jawa Timur hadir sebagai wadah pembinaan mahasiswa yang ingin melestarikan budaya pencak silat sekaligus membentuk karakter tangguh, disiplin, dan berprestasi. Berdiri sejak awal 2000-an atas inisiatif mahasiswa pecinta silat, UKM ini secara rutin menggelar latihan mingguan, penataran materi ke-SH-an, serta kegiatan sosial seperti bakti desa dan pengabdian masyarakat. Dengan dukungan universitas dan pengurus cabang PSHT Kota Surabaya, UKM PSHT UPN Jatim terus mencetak kader yang unggul dalam akademik maupun kejuaraan pencak silat.\n\nHingga kini, UKM PSHT UPN \"Veteran\" Jawa Timur aktif berpartisipasi dalam berbagai kejuaraan tingkat regional hingga nasional, serta menjadi ruang persaudaraan bagi mahasiswa dari berbagai jurusan. Nilai persaudaraan, kekeluargaan, dan nasionalisme menjadi landasan utama dalam setiap kegiatan. Melalui latihan yang konsisten dan pembinaan mental yang kuat, UKM ini berkomitmen melahirkan pendekar yang tidak hanya berprestasi di gelanggang, tetapi juga bermanfaat bagi masyarakat.", "");

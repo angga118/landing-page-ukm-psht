@@ -110,7 +110,7 @@ export default function LandingPage() {
     <>
       <Navbar />
       <main>
-        <Hero data={content.hero} introActive={introActive} />
+        <Hero data={content.hero} wa={content.kontak?.whatsapp} introActive={introActive} />
         <SelamatDatang />
         <Sejarah data={content.sejarah} />
         <Pengurus data={content.pengurus} />

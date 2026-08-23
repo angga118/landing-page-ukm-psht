@@ -14,7 +14,7 @@ function handleContent(string $path, string $method): void {
     try {
         switch ($path) {
             case '/content/hero':
-                $stmt = $pdo->query("SELECT id, judul, tagline, foto_background, teks_tombol, link_tombol FROM hero ORDER BY id DESC LIMIT 1");
+                $stmt = $pdo->query("SELECT id, judul, tagline, foto_background FROM hero ORDER BY id DESC LIMIT 1");
                 $row = $stmt->fetch();
                 if (!$row) {
                     jsonSuccess(new stdClass());

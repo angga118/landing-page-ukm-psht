@@ -4,7 +4,7 @@ export default function SelamatDatang() {
   return (
     <section
       id="selamat-datang"
-      className="relative overflow-hidden bg-gradient-to-br from-gold-400 via-gold-500 to-gold-700 py-20 sm:py-28"
+      className="relative scroll-mt-24 overflow-hidden bg-gradient-to-br from-gold-400 via-gold-500 to-gold-700 py-20 sm:py-28"
     >
       <div className="absolute inset-0 grain opacity-50" />
       {/* Ornamen lingkaran emas terang */}

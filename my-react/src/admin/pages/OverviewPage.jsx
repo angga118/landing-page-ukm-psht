@@ -9,7 +9,6 @@ export default function OverviewPage() {
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
     api
       .get('/admin/stats')
       .then((data) => {

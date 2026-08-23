@@ -96,7 +96,7 @@ export default function Footer({ kontak }) {
           <p>
             © {year} UKM PSHT UPN 'Veteran' Jawa Timur. Hak cipta dilindungi.
             <span className="mx-1.5 text-neutral-600">·</span>
-            <Link to="/admin" className="text-neutral-600 hover:text-gold-400 focus-ring">.</Link>
+            <Link to="/admin" aria-label="Admin" className="text-neutral-600 hover:text-gold-400 focus-ring">.</Link>
           </p>
           <p className="tracking-wide">Persaudaraan Setia Hati Terate</p>
         </div>

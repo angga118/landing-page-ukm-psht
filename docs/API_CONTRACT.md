@@ -22,7 +22,7 @@ jangan mengubah kontrak sepihak — laporkan ke orchestrator.
 
 | Method | Path | Data |
 |---|---|---|
-| GET | `/content/hero` | `{ id, judul, tagline, foto_background, teks_tombol, link_tombol }` |
+| GET | `/content/hero` | `{ id, judul, tagline, foto_background }` |
 | GET | `/content/sejarah` | `{ id, konten, foto }` |
 | GET | `/content/pengurus` | `[ { id, nama, jabatan, foto, periode, urutan } ]` (urut `urutan`) |
 | GET | `/content/prestasi` | `[ { id, nama_lomba, tingkat, tahun, foto, urutan } ]` |
@@ -65,7 +65,7 @@ Field per resource (multipart):
 
 | Method | Path | Body |
 |---|---|---|
-| POST | `/admin/content/hero` | multipart/JSON: `judul`, `tagline`, `teks_tombol`, `link_tombol`, `foto_background` (file) |
+| POST | `/admin/content/hero` | multipart/JSON: `judul`, `tagline`, `foto_background` (file) |
 | POST | `/admin/content/sejarah` | multipart/JSON: `konten`, `foto` (file) |
 | POST | `/admin/content/kontak` | JSON: `whatsapp`, `email`, `alamat`, `jadwal_latihan`, `instagram`, `maps_embed` |
 

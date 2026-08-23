@@ -15,8 +15,6 @@ export default function HeroPage() {
   const { showToast } = useToast()
   const [judul, setJudul] = useState('')
   const [tagline, setTagline] = useState('')
-  const [teksTombol, setTeksTombol] = useState('')
-  const [linkTombol, setLinkTombol] = useState('')
   const [foto, setFoto] = useState('')
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState('')
@@ -27,7 +25,6 @@ export default function HeroPage() {
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
     api
       .get('/content/hero')
       .then((data) => {
@@ -35,8 +32,6 @@ export default function HeroPage() {
         const d = data || {}
         setJudul(d.judul || '')
         setTagline(d.tagline || '')
-        setTeksTombol(d.teks_tombol || '')
-        setLinkTombol(d.link_tombol || '')
         setFoto(d.foto_background || d.foto || '')
         if (d.foto_background || d.foto) setPreview(d.foto_background || d.foto)
       })
@@ -77,8 +72,6 @@ export default function HeroPage() {
     const fd = new FormData()
     fd.append('judul', judul)
     fd.append('tagline', tagline)
-    fd.append('teks_tombol', teksTombol)
-    fd.append('link_tombol', linkTombol)
     if (file) fd.append('foto_background', file)
 
     setSaving(true)
@@ -119,16 +112,6 @@ export default function HeroPage() {
           <div>
             <label className="block text-sm font-medium text-ink-700 mb-1">Tagline</label>
             <textarea value={tagline} onChange={(e) => setTagline(e.target.value)} rows={3} className="w-full rounded-lg border border-neutral-300 px-3 py-2.5 text-sm focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" placeholder="Tagline singkat..." />
-          </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium text-ink-700 mb-1">Teks Tombol</label>
-              <input value={teksTombol} onChange={(e) => setTeksTombol(e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2.5 text-sm focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" placeholder="Daftar Sekarang" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-ink-700 mb-1">Link Tombol</label>
-              <input value={linkTombol} onChange={(e) => setLinkTombol(e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2.5 text-sm focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none" placeholder="https://... atau #kontak" />
-            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-ink-700 mb-1">Foto Background (JPG/PNG/WebP max 2MB)</label>
