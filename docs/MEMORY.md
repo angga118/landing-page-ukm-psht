@@ -23,6 +23,41 @@
 
 ## Log Perubahan
 
+### 2026-08-24 — Tambahan ringan beban-nol: 404, ErrorBoundary, PWA-lite, OG image, share
+
+1. **Route 404** (`src/pages/NotFoundPage.jsx` + catch-all `path="*"` PALING AKHIR di
+   `App.jsx`) — URL salah tidak lagi render kosong; tema gelap-emas konsisten,
+   tombol "Kembali ke Beranda".
+
+2. **ErrorBoundary** (`src/components/ErrorBoundary.jsx`) — dibungkus di `main.jsx`
+   di atas `BrowserRouter`, menangkap juga kegagalan chunk lazy admin. Fallback kartu
+   gelap + tombol "Muat Ulang Halaman"; error hanya ke console.
+
+3. **Skip-to-content** — link fokusabel pertama di landing ("Langsung ke konten utama"),
+   visually-hidden sampai `:focus-visible`; `<main id="konten-utama" tabIndex={-1}>`;
+   utilitas `.skip-link` di `index.css`.
+
+4. **Tombol "Bagikan" native** (`Footer.jsx`) — `navigator.share` dengan feature-detect;
+   fallback clipboard + toast self-contained "Link disalin" (pola toast existing karena
+   ToastProvider hanya ada di subtree admin).
+
+5. **PWA-lite tanpa service worker** — `public/manifest.json` (standalone, #050505,
+   lang id); ikon `icons/icon-192.png` & `icon-512.png` digenerate dari `logopsht.png`
+   via System.Drawing; `index.html` + link manifest + apple-touch-icon.
+
+6. **OG image 1200×630** — sumber desain `public/og-image.html` (Cinzel via Google
+   Fonts, glow emas, grain) → screenshot headless Edge (`--window-size=1200,630
+   --virtual-time-budget=10000`) → flatten JPG q90 `public/og-image.jpg` (76 KB).
+   `index.html`: `og:image` → og-image.jpg, `twitter:card` → `summary_large_image`.
+
+7. **PENTING saat deploy**: canonical, `og:url`, `og:image`, JSON-LD masih memakai
+   placeholder `https://domain-produksi.contoh/` — WAJIB diganti domain asli.
+
+8. **Verifikasi**: build sukses; bundle JS 275 KB (gzip ±85 KB, naik ~6 KB untuk semua
+   fitur baru); manifest/ikon/og-image.jpg ter-copy ke `dist/`. Zero dependency baru.
+   Catatan: og-image.jpg belum diverifikasi visual oleh agen (model tak bisa baca gambar)
+   — cek manual bila perlu.
+
 ### 2026-08-22 — Sesi besar: setup, perbaikan bug, poles UI/UX, tes E2E
 
 1. **Setup database** — Import `database/schema.sql` ke MySQL: DB `ukmpsht` dibuat

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
 import { waLink } from '../data'
@@ -14,6 +15,35 @@ const MENU = [
 export default function Footer({ kontak }) {
   const year = new Date().getFullYear()
   const ig = kontak?.instagram ? `https://instagram.com/${kontak.instagram.replace(/^@/, '')}` : '#'
+  const [copied, setCopied] = useState(false)
+
+  // Bagikan halaman: pakai Web Share API bila tersedia, fallback salin link
+  // ke clipboard lalu tampilkan toast "Link disalin".
+  const handleShare = async () => {
+    const url = window.location.origin + (window.location.pathname || '/')
+    const shareData = {
+      title: 'UKM PSHT UPN "Veteran" Jawa Timur',
+      text: 'Tangguh Dalam Aksi, Unggul Dalam Prestasi',
+      url,
+    }
+
+    if ('share' in navigator) {
+      try {
+        await navigator.share(shareData)
+        return
+      } catch {
+        // Dibatalkan user atau gagal → lanjut ke fallback salin link.
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 3000)
+    } catch {
+      // Clipboard tidak tersedia; biarkan tanpa toast.
+    }
+  }
 
   return (
     <footer className="relative border-t border-gold-500/15 bg-ink-950 pt-14">
@@ -88,6 +118,21 @@ export default function Footer({ kontak }) {
                 </svg>
                 {kontak?.email || 'ukmpsht@upnjatim.ac.id'}
               </a>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Bagikan halaman ini"
+                className="inline-flex min-h-[40px] items-center justify-center gap-2 rounded-full border border-gold-500/40 px-4 text-sm text-neutral-200 transition-colors hover:border-gold-400 hover:text-gold-300 focus-ring"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="18" cy="5" r="3" stroke="currentColor" strokeWidth="1.6" />
+                  <circle cx="6" cy="12" r="3" stroke="currentColor" strokeWidth="1.6" />
+                  <circle cx="18" cy="19" r="3" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" stroke="currentColor" strokeWidth="1.6" />
+                </svg>
+                Bagikan
+              </button>
             </div>
           </div>
         </div>
@@ -101,6 +146,27 @@ export default function Footer({ kontak }) {
           <p className="tracking-wide">Persaudaraan Setia Hati Terate</p>
         </div>
       </div>
+
+      {/* Toast fallback saat link disalin (pola: role/aria-live + tombol tutup) */}
+      {copied && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-20 left-4 right-4 z-[100] flex items-start gap-2 rounded-lg border border-gold-500/30 bg-ink-800 px-4 py-3 text-sm text-white shadow-lg md:bottom-6 md:left-auto md:max-w-sm"
+        >
+          <span className="flex-1">Link disalin</span>
+          <button
+            type="button"
+            onClick={() => setCopied(false)}
+            aria-label="Tutup notifikasi"
+            className="rounded p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-ring-light"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+      )}
     </footer>
   )
 }

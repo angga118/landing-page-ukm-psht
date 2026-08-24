@@ -108,8 +108,14 @@ export default function LandingPage() {
 
   return (
     <>
+      {/* Link aksesibilitas: elemen fokusabel PERTAMA di halaman landing.
+          Tersembunyi secara visual sampai difokuskan (:focus-visible). */}
+      <a href="#konten-utama" className="skip-link">
+        Langsung ke konten utama
+      </a>
+
       <Navbar />
-      <main>
+      <main id="konten-utama" tabIndex={-1}>
         <Hero data={content.hero} wa={content.kontak?.whatsapp} introActive={introActive} />
         <SelamatDatang />
         <Sejarah data={content.sejarah} />

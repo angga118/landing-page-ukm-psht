@@ -1,0 +1,26 @@
+{
+  "name": "UKM PSHT UPN \"Veteran\" Jawa Timur",
+  "short_name": "PSHT UPNVJT",
+  "description": "Landing page resmi UKM PSHT UPN 'Veteran' Jawa Timur. Persaudaraan Setia Hati Terate — Tangguh Dalam Aksi, Unggul Dalam Prestasi. Sejarah, pengurus, prestasi, galeri, dan kontak.",
+  "lang": "id",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
