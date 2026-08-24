@@ -38,12 +38,26 @@ Landing page resmi Unit Kegiatan Mahasiswa **Persaudaraan Setia Hati Terate (PSH
 
 ```
 landing-page-ukm-psht/
-├── api/            # Backend PHP (REST API)
-├── database/       # Skema & migrasi database MySQL
-├── docs/           # Dokumentasi tambahan (PRD, dsb)
-└── my-react/       # Frontend React (Vite)
+├── api/                    # Backend PHP (REST API)
+│   ├── index.php           # Front controller & routing
+│   ├── auth.php            # Login/logout/session admin
+│   ├── content.php         # Endpoint publik (GET konten)
+│   ├── admin.php           # CRUD admin (hero, sejarah, pengurus, prestasi, galeri, kontak)
+│   ├── db.php              # Koneksi PDO ke MySQL
+│   ├── helpers.php         # Helper JSON response, CORS, dsb
+│   └── uploads/            # Folder hasil upload foto
+├── database/
+│   └── schema.sql          # Skema tabel + seed data awal (termasuk 1 akun admin)
+├── docs/
+│   ├── API_CONTRACT.md     # Kontrak endpoint API (source of truth FE ↔ BE)
+│   └── MEMORY.md           # Catatan progres/keputusan project
+└── my-react/               # Frontend React (Vite)
     ├── public/
     └── src/
+        ├── landing/        # Komponen & halaman landing page publik
+        ├── admin/          # Komponen, halaman, dan context dashboard admin
+        ├── lib/            # Util & helper (mis. wrapper fetch API)
+        └── assets/
 ```
 
 ---
@@ -51,8 +65,8 @@ landing-page-ukm-psht/
 ## 🚀 Instalasi & Menjalankan Project
 
 ### Prasyarat
-- [Node.js](https://nodejs.org) (untuk frontend)
-- [XAMPP](https://www.apachefriends.org) (untuk PHP & MySQL)
+- [Node.js](https://nodejs.org) (v18+ disarankan) untuk frontend
+- [XAMPP](https://www.apachefriends.org) (Apache + MySQL/PHP) untuk backend
 
 ### 1. Clone repository
 ```bash
@@ -60,24 +74,47 @@ git clone https://github.com/angga118/landing-page-ukm-psht.git
 cd landing-page-ukm-psht
 ```
 
-### 2. Setup Frontend (React)
+### 2. Setup Backend & Database
+1. Jalankan **Apache** dan **MySQL** melalui XAMPP Control Panel.
+2. Buat database dengan mengimport `database/schema.sql` ke phpMyAdmin (skema ini otomatis membuat database `ukmpsht`, seluruh tabel, dan seed data awal termasuk satu akun admin).
+3. Salin/letakkan folder `api/` ke dalam `htdocs` XAMPP (mis. `htdocs/landing-page-ukm-psht/api`), atau sesuaikan virtual host sesuai kebutuhan.
+4. Cek konfigurasi koneksi database di `api/config.php` (`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`) dan sesuaikan bila kredensial MySQL kamu berbeda dari default XAMPP.
+
+### 3. Setup Frontend (React)
 ```bash
 cd my-react
 npm install
 npm run dev
 ```
-Frontend akan berjalan di `http://localhost:5173`
+Frontend akan berjalan di `http://localhost:5173`. Saat development, request ke `/api` di-proxy oleh Vite ke backend PHP (lihat `vite.config.js`) — pastikan path proxy-nya sesuai dengan lokasi `api/` di XAMPP.
 
-### 3. Setup Backend & Database
-1. Jalankan **Apache** dan **MySQL** melalui XAMPP Control Panel
-2. Import skema database dari folder `database/` ke phpMyAdmin
-3. Sesuaikan konfigurasi koneksi database di folder `api/`
+### 4. Login Admin
+Gunakan akun admin dari seed data `database/schema.sql` untuk masuk ke dashboard admin (`/admin` di frontend). Untuk keamanan, segera ganti password default setelah login pertama.
+
+---
+
+## 🔌 API
+
+Backend menyediakan REST API sederhana dengan prefix `/api`, contoh:
+
+| Method | Endpoint | Keterangan |
+|---|---|---|
+| GET | `/api/content/{resource}` | Ambil konten publik (`hero`, `sejarah`, `pengurus`, `prestasi`, `galeri`, `kontak`) |
+| POST | `/api/admin/login` | Login admin |
+| POST | `/api/admin/logout` | Logout admin |
+| GET | `/api/admin/me` | Cek sesi admin aktif |
+| GET/POST | `/api/admin/{resource}` | List / create / update konten (butuh sesi admin) |
+| POST | `/api/admin/{resource}/delete` | Hapus data |
+| POST | `/api/admin/{resource}/reorder` | Atur ulang urutan data |
+
+Detail lengkap request/response tiap endpoint ada di [`docs/API_CONTRACT.md`](./docs/API_CONTRACT.md).
 
 ---
 
 ## 📄 Dokumentasi
 
-Product Requirements Document (PRD) lengkap tersedia di folder [`docs/`](./docs).
+- [`docs/API_CONTRACT.md`](./docs/API_CONTRACT.md) — kontrak/spesifikasi endpoint API antara frontend dan backend.
+- [`docs/MEMORY.md`](./docs/MEMORY.md) — catatan progres dan keputusan teknis selama pengembangan.
 
 ---
 
