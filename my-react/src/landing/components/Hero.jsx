@@ -7,7 +7,7 @@ export default function Hero({ data, wa, introActive = false }) {
   return (
     <section
       id="beranda"
-      className="relative flex min-h-[78vh] items-center justify-center overflow-hidden sm:min-h-[85vh] lg:min-h-[92vh]"
+      className="hero-section relative flex min-h-[78vh] items-center justify-center overflow-hidden sm:min-h-[85vh] lg:min-h-[92vh]"
       // Saat splash intro aktif, geser hero-rise agar mulai berbarengan
       // dengan splash mulai keluar (transisi kontinu, tanpa jeda kosong).
       style={{ '--hero-rise-offset': introActive ? '1.5s' : '0s' }}
@@ -26,7 +26,7 @@ export default function Hero({ data, wa, introActive = false }) {
       <div className="absolute inset-0 bg-gradient-to-b from-ink-950/80 via-ink-950/55 to-ink-950/90" />
       <div className="absolute inset-0 grain" />
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 pt-24 text-center sm:px-6">
+      <div className="hero-content relative z-10 mx-auto w-full max-w-5xl px-4 pt-24 text-center sm:px-6">
         <p className="hero-rise d1 mx-auto mb-5 inline-block max-w-full border border-gold-500/40 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.3em] text-gold-300 sm:text-xs">
           Persaudaraan Setia Hati Terate
         </p>

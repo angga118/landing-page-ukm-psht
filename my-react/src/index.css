@@ -188,6 +188,25 @@ textarea::placeholder {
   animation-delay: calc(0.75s + var(--hero-rise-offset, 0s));
 }
 
+/* ===== Hero di viewport pendek (mobile landscape / layar pendek) =====
+   Kurangi tinggi minimum & padding agar konten hero tidak terpotong
+   saat tinggi layar terbatas (mis. HP diputar horizontal). */
+@media (max-height: 560px) {
+  .hero-section {
+    min-height: 100svh;
+  }
+  .hero-section .hero-content {
+    padding-top: 4.5rem;
+    padding-bottom: 3rem;
+  }
+  .hero-section .hero-content .hero-rise.d3 {
+    margin-top: 1rem;
+  }
+  .hero-section .hero-content .hero-rise.d4 {
+    margin-top: 1.25rem;
+  }
+}
+
 /* Scroll reveal helper */
 .reveal {
   opacity: 0;
