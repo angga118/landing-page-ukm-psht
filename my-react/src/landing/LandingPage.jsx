@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { api } from '../lib/api'
 import { FALLBACK_CONTENT } from './data'
+import heroBg from '../assets/hero.png'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import IntroSplash from './components/IntroSplash'
@@ -45,6 +46,9 @@ async function safeGet(path) {
 export default function LandingPage() {
   // Initial state = fallback lokal agar tampil sempurna walau API mati.
   const [content, setContent] = useState(FALLBACK_CONTENT)
+  // Menandai apakah fetch konten sudah selesai (sukses ATAU gagal).
+  // Dipakai untuk menghindari "flash" hero.png sebelum foto upload dari admin tampil.
+  const [contentReady, setContentReady] = useState(false)
 
   // Splash hanya sekali per session; introActive menggeser timing hero-rise.
   const [showIntro, setShowIntro] = useState(shouldShowIntro)
@@ -76,6 +80,7 @@ export default function LandingPage() {
         galeri: Array.isArray(galeri) && galeri.length ? galeri : prev.galeri,
         kontak: kontak || prev.kontak,
       }))
+      if (alive) setContentReady(true)
     }
     load()
     return () => {
@@ -106,6 +111,13 @@ export default function LandingPage() {
     setShowIntro(false)
   }, [])
 
+  // Foto hero: selama konten belum selesai dimuat, kosongkan agar tidak "flash"
+  // menampilkan hero.png lalu berganti ke foto upload. Setelah selesai, pakai
+  // foto upload dari admin; jika tidak ada, baru fallback ke hero.png.
+  const heroFoto = contentReady
+    ? content.hero.foto_background || heroBg
+    : ''
+
   return (
     <>
       {/* Link aksesibilitas: elemen fokusabel PERTAMA di halaman landing.
@@ -116,7 +128,7 @@ export default function LandingPage() {
 
       <Navbar />
       <main id="konten-utama" tabIndex={-1}>
-        <Hero data={content.hero} wa={content.kontak?.whatsapp} introActive={introActive} />
+        <Hero data={{ ...content.hero, foto_background: heroFoto }} wa={content.kontak?.whatsapp} introActive={introActive} />
         <SelamatDatang />
         <Sejarah data={content.sejarah} />
         <Pengurus data={content.pengurus} />

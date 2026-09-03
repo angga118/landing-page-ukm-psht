@@ -23,6 +23,64 @@
 
 ## Log Perubahan
 
+### 2026-09-02 — Fix flash hero.png sebelum foto upload tampil
+
+1. **Masalah**: Saat reload beranda, hero sempat menampilkan `hero.png` (aset lokal
+   fallback) lalu berganti ke foto yang di-upload dari admin — terlihat "blink" dua gambar.
+
+2. **Akar masalah**: Initial state `FALLBACK_CONTENT.hero.foto_background` memakai
+   `heroBg` (hero.png), sehingga hero langsung render hero.png sebelum API selesai
+   dimuat dan menggantinya dengan foto upload.
+
+3. **Perbaikan**:
+   - `src/landing/data.js`: `FALLBACK_CONTENT.hero.foto_background` dikosongkan (`''`).
+   - `src/landing/LandingPage.jsx`: tambah state `contentReady` (true setelah fetch
+     konten selesai, sukses ATAU gagal). Foto hero dihitung: selama belum siap →
+     kosong (tampil gradien dasar, tanpa flash); setelah siap → foto upload admin,
+     atau fallback `heroBg` bila tidak ada foto. `heroBg` diimpor langsung di
+     `LandingPage.jsx`.
+
+4. **Perilaku akhir**: Reload → hero tampil gradien sesaat → langsung foto upload
+   (tanpa hero.png di antaranya). Jika tidak ada foto upload → hero.png. Jika API
+   mati (offline) → hero.png (fallback tetap jalan).
+
+5. **Verifikasi**: `npm run build` sukses (60 modul, bundle 275 KB). Warning
+   `%VITE_SITE_URL%` pre-existing (env saat deploy, lihat entri 2026-09-02).
+
+6. **Catatan deploy**: Pengguna melihat versi **Vercel** — perubahan kode TIDAK
+   otomatis aktif sampai `git push` + redeploy. `public/sw.js` cache version di-bump
+   `psht-offline-v1` → `psht-offline-v2` agar bundle JS lama (yang masih flash) tidak
+   tersaji stale dari service worker cache-first.
+
+7. **Deploy langsung via CLI (tanpa GitHub)** — Project Vercel produksi yang benar
+   adalah **`ukmpsht`** (https://ukmpsht.vercel.app), team `psht2`, dengan env vars
+   lengkap (`DATABASE_URL`, `JWT_SECRET`, `VITE_SITE_URL`, Blob). Deploy:
+   `vercel link --project ukmpsht --yes` lalu `vercel deploy --prod --yes` dari
+   `my-react/`. Perbaikan flash hero sudah ter-deploy ke `ukmpsht` (bundle
+   `index-DuBZA1k3.js`), API `/api/content/hero` sukses dengan foto Blob.
+
+8. **Project `my-react` (prj_CtjFEEzzbD1sB5ucssunDPHgBe6s) TIDAK dipakai** — dibuat
+   tidak sengaja oleh `vercel link` saat project belum ter-link; tidak punya env vars.
+   Bisa dihapus dari dashboard Vercel agar tidak membingungkan.
+
+### 2026-09-02 — Migrasi deploy ke Vercel (Node.js API + TiDB + Blob)
+
+1. **Keputusan**: backend PHP (`api/`) ditulis ulang menjadi **Vercel Functions (Node.js)** di `my-react/api/`; database pindah ke **TiDB Cloud Starter** (MySQL-compatible, free); upload pindah ke **Vercel Blob** (public); auth PHP session → **JWT (jose)** di cookie `psht_session` (HttpOnly, SameSite=Lax, Secure di produksi).
+
+2. **Struktur baru** (`my-react/api/`): package lokal `@ukmpsht/api-lib` (`_lib/`: db, auth, blob, helpers, mime) + 9 route functions (`content/[resource]`, `admin/login|logout|me|stats`, `admin/content/[type]`, `admin/[resource]`, `admin/[resource]/delete|reorder`). `vercel.json` (framework vite, SPA rewrite). Root directory Vercel = `my-react`.
+
+3. **Database**: `database/schema-tidb.sql` (tanpa CREATE DATABASE/USE) + `database/migrate.js` (mysql2, multipleStatements). Jalankan: `DATABASE_URL="mysql://..." node database/migrate.js`. DB `ukmpsht` dibuat dulu di dashboard TiDB.
+
+4. **Upload**: produksi → Vercel Blob (URL absolut disimpan di DB); dev tanpa token → fallback filesystem `my-react/api/uploads/` (sudah di-gitignore). Validasi magic bytes (JPG/PNG/WebP) + maks 2MB (busboy).
+
+5. **Frontend**: BASE `/api` tetap (same-origin). `index.html` placeholder domain → `%VITE_SITE_URL%` (set env saat build). `api.delete` di `src/lib/api.js` dead code (semua tulis POST) — dibiarkan.
+
+6. **Env vars produksi**: `DATABASE_URL`, `JWT_SECRET`, `VITE_SITE_URL`; Blob via OIDC (store terhubung) atau `BLOB_READ_WRITE_TOKEN`.
+
+7. **Verifikasi**: smoke test 6/6 + E2E handler-level 17/17 PASS vs MySQL lokal (login benar/salah, cookie auth, CRUD, reorder, delete, stats, upload fallback). Gate Oracle Fase 1 & 3 approve-with-changes, remediation selesai.
+
+8. **Catatan deploy**: PHP `api/` root repo dipertahankan untuk dev XAMPP. `vite.config.js` masih proxy ke PHP (dev-against-PHP sampai cutover). Kredensial admin tetap `admin` / `admin1922`.
+
 ### 2026-08-24 — Tambahan ringan beban-nol: 404, ErrorBoundary, PWA-lite, OG image, share
 
 1. **Route 404** (`src/pages/NotFoundPage.jsx` + catch-all `path="*"` PALING AKHIR di

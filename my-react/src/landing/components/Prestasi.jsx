@@ -31,7 +31,7 @@ export default function Prestasi({ data = [] }) {
             <p className="text-sm text-neutral-400">Daftar prestasi akan segera diperbarui</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {list.map((p, i) => {
               const style = TINGKAT_STYLE[p.tingkat] || TINGKAT_STYLE['Provinsi']
               return (
@@ -42,17 +42,17 @@ export default function Prestasi({ data = [] }) {
                         src={p.foto}
                         alt={`Trofi dan dokumentasi ${p.nama_lomba}, ${p.tingkat} ${p.tahun}`}
                         seed={i + 3}
-                        className="aspect-[16/10] w-full object-cover"
+                        className="aspect-square w-full object-cover sm:aspect-[16/10]"
                       />
-                      <span className="absolute right-3 top-3 rounded-full border bg-ink-950/70 px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur">
+                      <span className="absolute right-1.5 top-1.5 rounded-full border bg-ink-950/70 px-1.5 py-0.5 text-[9px] font-semibold tracking-wide backdrop-blur sm:right-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[11px]">
                         <span className={style}>{p.tahun}</span>
                       </span>
                     </div>
-                    <div className="flex flex-1 flex-col p-4">
-                      <span className={`mb-2 inline-block w-fit rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${style}`}>
+                    <div className="flex flex-1 flex-col p-2.5 sm:p-4">
+                      <span className={`mb-1 inline-block w-fit rounded-full border px-1.5 py-0.5 text-[9px] font-semibold sm:mb-2 sm:px-2.5 sm:py-0.5 sm:text-[11px] ${style}`}>
                         {p.tingkat}
                       </span>
-                      <h3 className="text-sm font-semibold leading-snug text-white">{p.nama_lomba}</h3>
+                      <h3 className="text-xs font-semibold leading-snug text-white sm:text-sm">{p.nama_lomba}</h3>
                     </div>
                   </article>
                 </Reveal>

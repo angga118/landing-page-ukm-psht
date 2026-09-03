@@ -2,3 +2,6 @@
 dist/
 .env
 *.log
+
+# deepwork state (git-local)
+.slim/deepwork/

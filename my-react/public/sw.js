@@ -1,6 +1,6 @@
 // PSHT Offline Service Worker — vanilla, tanpa Workbox
 // Cache versioning: ubah string ini saat offline.html atau aset inti berubah
-const CACHE_NAME = "psht-offline-v1";
+const CACHE_NAME = "psht-offline-v2";
 const OFFLINE_URL = "/offline.html";
 
 // Aset inti yang wajib ada agar offline.html tetap cantik saat offline

@@ -1,0 +1,14 @@
+{
+  "name": "@ukmpsht/api-lib",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./helpers": "./helpers.js",
+    "./db": "./db.js",
+    "./auth": "./auth.js",
+    "./blob": "./blob.js",
+    "./mime": "./mime.js",
+    "./index": "./index.js"
+  }
+}

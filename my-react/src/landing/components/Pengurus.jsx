@@ -24,11 +24,11 @@ export default function Pengurus({ data = [] }) {
             <p className="text-sm text-neutral-400">Data pengurus akan segera diperbarui</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {list.map((p, i) => (
               <Reveal key={p.id} delay={(i % 3) * 90}>
-                <article className="group h-full rounded-2xl border border-white/10 bg-ink-950/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-xl hover:shadow-gold-500/10">
-                  <div className="relative mb-4 overflow-hidden rounded-xl">
+                <article className="group h-full rounded-2xl border border-white/10 bg-ink-950/60 p-3 transition-all duration-300 hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-xl hover:shadow-gold-500/10 sm:p-5">
+                  <div className="relative mb-2 overflow-hidden rounded-xl sm:mb-4">
                     <SmartImage
                       src={p.foto}
                       alt={`Foto ${p.nama}, ${p.jabatan} UKM PSHT UPN 'Veteran' Jawa Timur`}
@@ -38,10 +38,10 @@ export default function Pengurus({ data = [] }) {
                     />
                     <div className="absolute inset-0 ring-1 ring-inset ring-white/10" />
                   </div>
-                  <h3 className="font-display text-lg font-semibold text-white">{p.nama}</h3>
-                  <p className="mt-1 text-sm font-medium text-gold-400">{p.jabatan}</p>
+                  <h3 className="font-display text-sm font-semibold text-white sm:text-lg">{p.nama}</h3>
+                  <p className="mt-0.5 text-xs font-medium text-gold-400 sm:mt-1 sm:text-sm">{p.jabatan}</p>
                   {p.periode && (
-                    <p className="mt-2 text-xs uppercase tracking-wider text-neutral-400">
+                    <p className="mt-1 text-[10px] uppercase tracking-wider text-neutral-400 sm:mt-2 sm:text-xs">
                       Periode {p.periode}
                     </p>
                   )}

@@ -11,6 +11,13 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@ukmpsht/api-lib": "file:./api/_lib",
+    "@vercel/blob": "^1.1.1",
+    "@vercel/functions": "^2.2.12",
+    "bcryptjs": "^3.0.2",
+    "busboy": "^1.6.0",
+    "jose": "^6.1.1",
+    "mysql2": "^3.14.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2",

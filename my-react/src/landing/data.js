@@ -2,15 +2,17 @@ import heroBg from '../assets/hero.png'
 
 // Fallback content — bentuk persis sama dengan respons /content/* (lihat docs/API_CONTRACT.md).
 // Digunakan sebagai initial state agar halaman tetap tampil sempurna walau API mati.
-// Field gambar (foto*) dikosongkan agar SmartImage menampilkan placeholder bergaya;
-// kecuali hero yang memakai aset lokal (hero.png) agar tampilan hero selalu utuh.
+// Field gambar (foto*) dikosongkan agar SmartImage menampilkan placeholder bergaya.
+// Khusus hero: foto_background sengaja dikosongkan di initial state agar saat reload
+// tidak "flash" menampilkan hero.png lalu berganti ke foto upload dari admin.
+// hero.png dipakai sebagai fallback HANYA setelah API selesai dimuat (lihat LandingPage).
 
 export const FALLBACK_CONTENT = {
   hero: {
     id: 1,
     judul: "UKM PSHT UPN 'Veteran' Jawa Timur",
     tagline: 'Tangguh Dalam Aksi, Unggul Dalam Prestasi',
-    foto_background: heroBg,
+    foto_background: '',
   },
 
   sejarah: {

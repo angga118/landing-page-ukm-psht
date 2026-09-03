@@ -6,7 +6,7 @@ jangan mengubah kontrak sepihak — laporkan ke orchestrator.
 
 ## 1. Konvensi Umum
 
-- Base URL: `/api` (dev: di-proxy Vite ke `http://localhost/landing-page-ukmpsht/api`).
+- Base URL: `/api` (dev: di-proxy Vite ke XAMPP PHP; produksi: dilayani Vercel Functions di `my-react/api/`).
 - Semua response JSON dengan envelope:
 
 ```json
@@ -15,8 +15,8 @@ jangan mengubah kontrak sepihak — laporkan ke orchestrator.
 ```
 
 - HTTP status sesuai: 200 OK, 401 belum login, 403 forbidden, 404 tidak ada, 422 validasi, 500 server.
-- **Semua operasi tulis memakai POST** (bukan PUT/PATCH/DELETE) agar multipart upload aman di PHP.
-- Auth: PHP session (cookie `PHPSESSID`, `credentials: 'include'`). Karena dev lewat proxy Vite = same-origin, tidak butuh CORS khusus; backend tetap mengirim header CORS longgar sebagai jaring pengaman.
+- **Semua operasi tulis memakai POST** (bukan PUT/PATCH/DELETE) agar multipart upload aman.
+- Auth: JWT (HS256) di cookie `psht_session` (HttpOnly, SameSite=Lax, Secure di produksi), `credentials: 'include'`. Same-origin di Vercel → tidak butuh CORS.
 
 ## 2. Endpoint Publik (tanpa login)
 
@@ -80,36 +80,44 @@ Response: object konten terbaru (bentuk sama dengan endpoint publik).
 ## 5. Upload Gambar
 
 - Field file: `foto` / `foto_background`.
-- Format valid: JPG, PNG, WebP — cek via `finfo`, bukan sekadar ekstensi.
+- Format valid: JPG, PNG, WebP — cek via magic bytes (bukan sekadar ekstensi).
 - Maksimal **2 MB**.
-- Disimpan ke `api/uploads/{resource}/{randomslug}.{ext}` (folder dibuat otomatis).
-- Ganti foto lama saat update → hapus file lama jika terpakai.
-- Nilai yang disimpan DB & dikembalikan API: `/api/uploads/{resource}/{namafile}`.
+- Produksi: disimpan ke **Vercel Blob** (public), nilai yang disimpan DB & dikembalikan API adalah **URL absolut** `https://<store>.public.blob.vercel-storage.com/...`.
+- Dev (tanpa token Blob): fallback ke filesystem `my-react/api/uploads/{resource}/{slug}.{ext}`, nilai = path relatif `/api/uploads/...`.
+- Ganti foto lama saat update → hapus file lama (Blob `del()` / unlink lokal) jika nilai lama URL absolut atau path `/api/uploads/`.
+- Frontend memakai nilai field langsung di `<img src>` (URL absolut maupun path relatif sama-sama didukung).
 
-## 6. Database (MySQL, XAMPP)
+## 6. Database (TiDB Cloud, MySQL-compatible)
 
-- Nama DB: **`ukmpsht`**, charset `utf8mb4_unicode_ci`. Dibuat oleh `database/schema.sql`.
+- Nama DB: **`ukmpsht`**, charset `utf8mb4_unicode_ci`. Dibuat via dashboard TiDB Cloud Starter.
+- Migrasi: `database/schema-tidb.sql` + `database/migrate.js` (lihat `database/README.md`).
 - Tabel: `hero`, `sejarah`, `pengurus`, `prestasi`, `galeri`, `kontak`, `admin_user`
   (kolom sesuai PRD §9 + kolom `urutan` INT untuk pengurus/prestasi/galeri).
 - Seed: 1 baris hero/sejarah/kontak berisi teks default PRD, beberapa contoh
   pengurus/prestasi/galeri bertema PSHT, dan admin:
-  - username `admin`, password `admin1922` (hash bcrypt).
+  - username `admin`, password `admin1922` (hash bcrypt `$2y$`, diverifikasi `bcryptjs`).
 
-## 7. Struktur Folder Backend
+## 7. Struktur Folder Backend (Vercel Functions)
 
 ```
-api/
-├── index.php        # front controller (parse path setelah /api)
-├── config.php       # kredensial DB + konstanta
-├── db.php           # koneksi PDO
-├── helpers.php      # envelope json, validasi, upload
-├── auth.php         # login/logout/me + guard session
-├── content.php      # endpoint publik /content/*
-├── admin.php        # CRUD /admin/*
-└── uploads/         # hasil upload (dilayani Apache)
+my-react/
+├── api/                    # Vercel Functions (Node.js, ESM) — route /api/*
+│   ├── _lib/               # package lokal @ukmpsht/api-lib (db, auth, blob, helpers, mime)
+│   ├── content/[resource].js
+│   └── admin/
+│       ├── login.js, logout.js, me.js, stats.js
+│       ├── content/[type].js
+│       ├── [resource].js
+│       └── [resource]/delete.js, [resource]/reorder.js
+├── vercel.json             # framework vite, SPA rewrite
+└── ...
 database/
-└── schema.sql       # DDL + seed
+├── schema.sql              # XAMPP/MySQL lokal (dev)
+├── schema-tidb.sql         # TiDB Cloud (produksi)
+└── migrate.js              # skrip migrasi TiDB
 ```
+
+> Backend PHP lama (`api/` di root repo) dipertahankan hanya untuk dev XAMPP.
 
 ## 8. Konvensi Frontend
 
